@@ -1,10 +1,8 @@
-# Slim v3 view #
+# Slim v3 module #
 
 ## Introduction ##
 
-A wrapper for Windwalker renderer (Blade, Twig, PHP etc) for use in Slim3 projects
-
-See the Windwalker renderer here - https://github.com/ventoviro/windwalker
+Modules for Slim3
 
 ## Installation ##
 
@@ -12,42 +10,48 @@ Composer
 
 ```php
 "require-dev": {
-    "martynbiz/slim3-view": "dev-master"
+    "martynbiz/slim3-module": "dev-master"
 }
 ```
 
-## Usage ##
+## Simple Usage ##
 
-Below is an example usage within the slim3 skeleton app:
-
-settings.php
+This library expects a modules directory somewhere, and within that module directories:
 
 ```
-$settings = [
-    'settings' => [
-        'renderer' => [
-            'template_path' => '/path/to/views/',
-            'cache_path' => '/path/to/cache/views',
-        ],
-        .
-        .
-        .
+modules/
+├── hello
+│   └── module.php
 ```
 
-dependencies.php
+Each module file will contain code required for that module. More advanced setups may
+include sub-directories.
+
+routes.php
 
 ```php
-// view renderer
-$container['renderer'] = function ($c) {
-    $settings = $c->get('settings')['renderer'];
+$module = new \MartynBiz\Slim3Module\Module($app, [
+    'modules_dir' => APPLICATION_PATH . '/modules',
+]);
 
-    // choose your weapon.. :) e.g. Blade, Twig, etc
-    $renderer = new \Windwalker\Renderer\BladeRenderer(array(
-        $settings['template_path'],
-    ), array(
-        'cache_path' => $settings['cache_path'],
-    ));
-
-    return new \MartynBiz\Slim3View\Renderer($renderer);
-};
+$module->load('hello');
 ```
+
+home/module.php
+
+```php
+$app->get('/hello/{name}', function (Request $request, Response $response) {
+    $name = $request->getAttribute('name');
+    $response->getBody()->write("Hello, $name");
+
+    return $response;
+});
+```
+
+## Advanced Usage ##
+
+...
+
+## Modules within modules ##
+
+...
