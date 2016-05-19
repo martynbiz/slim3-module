@@ -50,8 +50,49 @@ $app->get('/hello/{name}', function (Request $request, Response $response) {
 
 ## Advanced Usage ##
 
+### Libraries within modules ###
+
+If you want to have library classes within modules, these can be autoloaded with
+composer. Below is an example of library files autoloaded with PSR-4:
+
+```
+modules/
+├── hello
+│   └── library
+│   │   └── Hello.php
+│   └── module.php
+```
+
+```
+"autoload": {
+    "psr-4": {
+        "App\\Modules\\Home\\": "app/modules/hello/library/",
+        .
+        .
+        .
+```
+
+### Module configuration ###
+
 ...
 
-## Modules within modules ##
+### HMVC ###
 
 ...
+
+### Modules within modules ###
+
+...
+
+### README ###
+
+Lastly, I recommend README file within each module to document how to install the
+module within your app. This is not required though, but may come in handy months or
+years down the line:
+
+```
+modules/
+├── hello
+│   └── module.php
+│   └── README.md
+```
