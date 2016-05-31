@@ -24,20 +24,22 @@ modules/
 │   └── module.php
 ```
 
-Each module file will contain code required for that module. More advanced setups may
-include sub-directories.
+Each module file will contain code required for that module.
 
-routes.php
+index.php
 
 ```php
-$module = new \MartynBiz\Slim3Module\Module($app, [
-    'modules_dir' => APPLICATION_PATH . '/modules',
-]);
+$classLoader = require 'vendor/autoload.php';
 
-$module->load('hello');
+$module = new \MartynBiz\Slim3Module\Module($classLoader, $app, [
+    'autoload' => [ // <--- list of modules to autoload
+        'hello',
+    ],
+    'modules_path' => '/path/to/modules',
+]);
 ```
 
-home/module.php
+modules/application/module.php
 
 ```php
 $app->get('/hello/{name}', function (Request $request, Response $response) {
@@ -63,24 +65,25 @@ modules/
 │   └── module.php
 ```
 
+From within the module.php file, the following can be used:
+
+```php
+// classLoader is made available to module.php during loading
+$classLoader->setPsr4("Hello\\", __DIR__ . "/src");
+```
+
+Alternatively these can be loaded from the composer.json
+
 ```
 "autoload": {
     "psr-4": {
-        "App\\Modules\\Home\\": "app/modules/hello/library/",
+        "Hello\\": "modules/hello/library/",
         .
         .
         .
 ```
 
 ### Module configuration ###
-
-...
-
-### HMVC ###
-
-...
-
-### Modules within modules ###
 
 ...
 
