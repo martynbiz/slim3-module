@@ -39,7 +39,7 @@ $module = new \MartynBiz\Slim3Module\Module($classLoader, $app, [
 ]);
 ```
 
-modules/application/module.php
+modules/hello/module.php
 
 ```php
 $app->get('/hello/{name}', function (Request $request, Response $response) {
