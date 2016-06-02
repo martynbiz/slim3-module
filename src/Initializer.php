@@ -76,7 +76,8 @@ class Initializer
         // next, load settings of all modules
         foreach ($moduleClassMap as $moduleClassName) {
             $moduleSettings = $moduleClassName::getModuleConfig();
-            $container['settings']->__construct($moduleSettings);
+            $allSettings = $container['settings']->all();
+            $container['settings']->__construct( array_merge_recursive($allSettings, $moduleSettings) );
         }
 
         // next, init dependencies of all modules now that we have settings, class maps etc
