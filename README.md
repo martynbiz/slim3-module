@@ -36,6 +36,7 @@ $moduleInitializer = new \MartynBiz\Slim3Module\Module($classLoader, $app, [
     'modules_path' => '/path/to/modules',
 ]);
 
+$moduleInitializer->initModules();
 ```
 
 /path/to/modules/Hello/Module.php
