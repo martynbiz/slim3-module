@@ -19,10 +19,10 @@
         }
     },
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "slim/slim": "~3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8.*",
-        "slim/slim": "~3.0"
+        "phpunit/phpunit": "4.8.*"
     }
 }

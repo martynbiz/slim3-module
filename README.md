@@ -16,43 +16,54 @@ Composer
 
 ## Simple Usage ##
 
-This library expects a modules directory somewhere, and within that module directories:
+This library expects a directory within the modules directory, and within that module a {module_name}/Module class:
 
 ```
 modules/
-├── hello
-│   └── module.php
+├── Hello
+│   └── Module.php
 ```
 
-Each module file will contain code required for that module.
+/path/to/modules/Hello/Module.php
 
-index.php
+```php
+namespace Hello;
+
+use Slim\App;
+use MartynBiz\Slim3Module\AbstractModule;
+
+class Module extends AbstractModule
+{
+    public static function initRoutes(App $app)
+    {
+        $app->get('/hello/{name}', function (Request $request, Response $response) {
+            $name = $request->getAttribute('name');
+            $response->getBody()->write("Hello, $name");
+
+            return $response;
+        });
+    }
+}
+```
+
+public/index.php
 
 ```php
 $classLoader = require 'vendor/autoload.php';
 
-$module = new \MartynBiz\Slim3Module\Module($classLoader, $app, [
+$moduleInitializer = new \MartynBiz\Slim3Module\Module($classLoader, $app, [
     'autoload' => [ // <--- list of modules to autoload
-        'hello',
+        'Hello',
     ],
     'modules_path' => '/path/to/modules',
 ]);
+
+moduleInitializer->initModules();
 ```
 
-modules/application/module.php
+## Advanced initialization ##
 
-```php
-$app->get('/hello/{name}', function (Request $request, Response $response) {
-    $name = $request->getAttribute('name');
-    $response->getBody()->write("Hello, $name");
-
-    return $response;
-});
-```
-
-## Advanced Usage ##
-
-### Libraries within modules ###
+### 
 
 If you want to have library classes within modules, these can be autoloaded with
 composer. Below is an example of library files autoloaded with PSR-4:
