@@ -65,11 +65,11 @@ class Module extends AbstractModule
 
 It is possible for moodules to use libraries of other modules. To allow this, module initializer will load modules in the following order:
 
-# Initiate class maps for all modules
-# Import settings from all modules
-# Initiate dependencies for all modules
-# Initiate app middleware for all modules
-# Lastly, initiate routes for all modules
+1. Initiate class maps for all modules
+2. Import settings from all modules
+3. Initiate dependencies for all modules
+4. Initiate app middleware for all modules
+5. Lastly, initiate routes for all modules
 
 To configure modules, simple override the methods of the AbstractModule class:
 
