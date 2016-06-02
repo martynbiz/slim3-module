@@ -51,7 +51,7 @@ class Module extends AbstractModule
 {
     public static function initRoutes(App $app)
     {
-        $app->get('/hello/{name}', function (Request $request, Response $response) {
+        $app->get('/hello/{name}', function ($request, $response) {
             $name = $request->getAttribute('name');
             $response->getBody()->write("Hello, $name");
 
@@ -117,7 +117,7 @@ class Module extends AbstractModule
 
     public static function initRoutes(App $app)
     {
-        $app->get('/hello/{name}', function (Request $request, Response $response) {
+        $app->get('/hello/{name}', function ($request, $response) {
             $name = $request->getAttribute('name');
             $response->getBody()->write("Hello, $name");
 
