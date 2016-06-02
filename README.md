@@ -58,43 +58,9 @@ $moduleInitializer = new \MartynBiz\Slim3Module\Module($classLoader, $app, [
     'modules_path' => '/path/to/modules',
 ]);
 
-moduleInitializer->initModules();
 ```
 
 ## Advanced initialization ##
-
-### 
-
-If you want to have library classes within modules, these can be autoloaded with
-composer. Below is an example of library files autoloaded with PSR-4:
-
-```
-modules/
-├── hello
-│   └── library
-│   │   └── Hello.php
-│   └── module.php
-```
-
-From within the module.php file, the following can be used:
-
-```php
-// classLoader is made available to module.php during loading
-$classLoader->setPsr4("Hello\\", __DIR__ . "/src");
-```
-
-Alternatively these can be loaded from the composer.json
-
-```
-"autoload": {
-    "psr-4": {
-        "Hello\\": "modules/hello/library/",
-        .
-        .
-        .
-```
-
-### Module configuration ###
 
 ...
 

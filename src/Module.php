@@ -14,7 +14,6 @@ class Module
     protected $app;
 
     /**
-
      * @var ClassLoader
      */
     protected $classLoader;
@@ -30,9 +29,30 @@ class Module
         $this->classLoader = $classLoader;
         $this->settings = $settings;
 
-        // load each module in $settings
-        foreach($settings['autoload'] as $module) {
-            $this->load($module);
+        $autoloadModules = $settings['autoload'];
+
+        // 1) load initClassLoader() for each module
+        // this will allow us to access other module's classes (e.g. Auth)
+        foreach($autoloadModules as $moduleName) {
+            // $this->initClassLoader($moduleName);
+        }
+
+        // 1) load initDependencies() for each module
+        // this will allow us to access other module's dependencies (e.g. Auth)
+        foreach($autoloadModules as $moduleName) {
+            // $this->initDependencies($moduleName);
+        }
+
+        // 1) load initMiddleware() for each module
+        // now that all dependencies have been init
+        foreach($autoloadModules as $moduleName) {
+            // $this->initMiddleware($moduleName);
+        }
+
+        // 2) load load() for each module so we can load classes
+        // e.g. lastly, routes
+        foreach($autoloadModules as $moduleName) {
+            // $this->load($moduleName);
         }
     }
 
