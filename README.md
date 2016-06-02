@@ -29,7 +29,7 @@ public/index.php
 ```php
 $classLoader = require 'vendor/autoload.php';
 
-$moduleInitializer = new \MartynBiz\Slim3Module\Module($classLoader, $app, [
+$moduleInitializer = new \MartynBiz\Slim3Module\Initializer($classLoader, $app, [
     'autoload' => [ // <--- list of modules to autoload
         'Hello',
     ],
