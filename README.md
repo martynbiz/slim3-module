@@ -49,7 +49,7 @@ use MartynBiz\Slim3Module\AbstractModule;
 
 class Module extends AbstractModule
 {
-    public static function initRoutes(App $app)
+    public function initRoutes(App $app)
     {
         $app->get('/hello/{name}', function ($request, $response) {
             $name = $request->getAttribute('name');
@@ -83,7 +83,7 @@ use MartynBiz\Slim3Module\AbstractModule;
 
 class Module extends AbstractModule
 {
-    public static function getModuleConfig()
+    public function getModuleConfig()
     {
         return [
             'logger' => [
@@ -92,12 +92,12 @@ class Module extends AbstractModule
         ];
     }
 
-    public static function initClassLoader(ClassLoader $classLoader)
+    public function initClassLoader(ClassLoader $classLoader)
     {
         $classLoader->setPsr4("Hello\\", __DIR__ . "/src");
     }
 
-    public static function initDependencies(Container $container)
+    public function initDependencies(Container $container)
     {
         $container['logger'] = function ($c) {
             $settings = $c->get('settings')['logger'];
@@ -106,16 +106,16 @@ class Module extends AbstractModule
             $logger->pushHandler(new \Monolog\Handler\StreamHandler($settings['path'], \Monolog\Logger::DEBUG));
             return $logger;
         };
-        
+
         //...
     }
-    
-    public static function initMiddleware(App $app)
+
+    public function initMiddleware(App $app)
     {
         //...
     }
 
-    public static function initRoutes(App $app)
+    public function initRoutes(App $app)
     {
         $app->get('/hello/{name}', function ($request, $response) {
             $name = $request->getAttribute('name');

@@ -42,8 +42,10 @@ class Initializer
      */
     public function initModules()
     {
+        $moduleInstances = [];
+
         // build an class map of [[module => moduleClassPath], ..]
-        $moduleClassMap = [];
+        // $moduleClassMap = [];
         foreach ($this->settings['autoload'] as $moduleName) {
 
             // e.g. "/path/to/modules/{module_name}/Module.php"
@@ -57,7 +59,7 @@ class Initializer
 
             // add to class map so we can easily access it later in this function
             $moduleClassName = sprintf('%s\Module', $moduleName);
-            $moduleClassMap[$moduleName] = $moduleClassName;
+            $moduleInstances[$moduleName] = new $moduleClassName();
         }
 
         // next, loop through each module and call methods in order
@@ -69,13 +71,13 @@ class Initializer
         // first, class loader for all modules so that we can access classes between modules
         // e.g. other modules depend on Auth module, so we need to access those classes when
         // we initDependencies
-        foreach ($moduleClassMap as $moduleClassName) {
-            $moduleClassName::initClassLoader($classLoader);
+        foreach ($moduleInstances as $module) {
+            $module->initClassLoader($classLoader);
         }
 
         // next, load settings of all modules
-        foreach ($moduleClassMap as $moduleName => $moduleClassName) {
-            $moduleSettings = $moduleClassName::getModuleConfig();
+        foreach ($moduleInstances as $moduleName => $module) {
+            $moduleSettings = $module->getModuleConfig();
             $allSettings = $container['settings']->all();
             if (!isset($allSettings['modules'][$moduleName]) or !is_array($allSettings['modules'][$moduleName])) {
                 $allSettings['modules'][$moduleName] = [];
@@ -85,18 +87,18 @@ class Initializer
         }
 
         // next, init dependencies of all modules now that we have settings, class maps etc
-        foreach ($moduleClassMap as $moduleClassName) {
-            $moduleClassName::initDependencies($container);
+        foreach ($moduleInstances as $module) {
+            $module->initDependencies($container);
         }
 
         // next, init app middleware of all modules now that we have settings, class maps, dependencies etc
-        foreach ($moduleClassMap as $moduleClassName) {
-            $moduleClassName::initMiddleware($app);
+        foreach ($moduleInstances as $module) {
+            $module->initMiddleware($app);
         }
 
         // lastly, routes
-        foreach ($moduleClassMap as $moduleClassName) {
-            $moduleClassName::initRoutes($app);
+        foreach ($moduleInstances as $module) {
+            $module->initRoutes($app);
         }
     }
 }

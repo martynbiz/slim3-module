@@ -18,7 +18,7 @@ abstract class AbstractModule
      * Get config array for this module
      * @return array
      */
-    public static function getModuleConfig()
+    public function getModuleConfig()
     {
         return [];
     }
@@ -28,7 +28,7 @@ abstract class AbstractModule
      * @param ClassLoader $classLoader
      * @return void
      */
-    public static function initClassLoader(ClassLoader $classLoader)
+    public function initClassLoader(ClassLoader $classLoader)
     {
 
     }
@@ -38,7 +38,7 @@ abstract class AbstractModule
      * @param Container $container
      * @return void
      */
-    public static function initDependencies(Container $container)
+    public function initDependencies(Container $container)
     {
 
     }
@@ -48,7 +48,7 @@ abstract class AbstractModule
      * @param App $app
      * @return void
      */
-    public static function initMiddleware(App $app)
+    public function initMiddleware(App $app)
     {
 
     }
@@ -59,7 +59,7 @@ abstract class AbstractModule
      * @param App $app
      * @return void
      */
-    public static function initRoutes(App $app)
+    public function initRoutes(App $app)
     {
 
     }
