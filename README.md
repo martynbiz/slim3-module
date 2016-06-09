@@ -27,9 +27,7 @@ modules/
 public/index.php
 
 ```php
-$classLoader = require 'vendor/autoload.php';
-
-$moduleInitializer = new \MartynBiz\Slim3Module\Initializer($classLoader, $app, [
+$moduleInitializer = new \MartynBiz\Slim3Module\Initializer($app, [
     'autoload' => [ // <--- list of modules to autoload
         'Hello',
     ],
@@ -38,6 +36,10 @@ $moduleInitializer = new \MartynBiz\Slim3Module\Initializer($classLoader, $app, 
 
 $moduleInitializer->initModules();
 ```
+
+composer.json
+
+TODO add path to namespace e.g. App/Module
 
 /path/to/modules/Hello/Module.php
 

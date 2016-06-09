@@ -23,15 +23,15 @@ abstract class AbstractModule
         return [];
     }
 
-    /**
-     * Set class maps for class loader to autoload classes for this module
-     * @param ClassLoader $classLoader
-     * @return void
-     */
-    public function initClassLoader(ClassLoader $classLoader)
-    {
-
-    }
+    // /**
+    //  * Set class maps for class loader to autoload classes for this module
+    //  * @param ClassLoader $classLoader
+    //  * @return void
+    //  */
+    // public function initClassLoader(ClassLoader $classLoader)
+    // {
+    //
+    // }
 
     /**
      * Set class maps for class loader to autoload classes for this module

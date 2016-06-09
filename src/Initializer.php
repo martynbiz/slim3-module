@@ -44,14 +44,14 @@ class Initializer
         // $moduleClassMap = [];
         foreach ($this->settings['autoload'] as $moduleName) {
 
-            // e.g. "/path/to/modules/{module_name}/Module.php"
-            $moduleClassPath = realpath(sprintf('%s/%s/Module.php', $this->settings['modules_path'], $moduleName));
-            if (! $moduleClassPath) {
-                throw new \Exception('Module class file could not be found');
-            }
+            // // e.g. "/path/to/modules/{module_name}/Module.php"
+            // $moduleClassPath = realpath(sprintf('%s/%s/Module.php', $this->settings['modules_path'], $moduleName));
+            // if (! $moduleClassPath) {
+            //     throw new \Exception('Module class file could not be found');
+            // }
 
-            // include the required module.php path of that module
-            require $moduleClassPath;
+            // // include the required module.php path of that module
+            // require $moduleClassPath;
 
             // add to class map so we can easily access it later in this function
             $moduleClassName = sprintf('%s\Module', $moduleName);
@@ -80,25 +80,25 @@ class Initializer
             $container['settings']->__construct( $allSettings );
         }
 
-        $this->initClassLoader($classLoader);
+        // $this->initClassLoader($classLoader);
         $this->initDependencies($container);
         $this->initMiddleware($app);
         $this->initRoutes($app);
     }
 
-    /**
-     * Load the module. This will run for all modules, use for routes mainly
-     * @param string $moduleName Module name
-     */
-    public function initClassLoader()
-    {
-        $moduleInstances = $this->moduleInstances;
-        $classLoader = $this->classLoader;
-
-        foreach ($moduleInstances as $module) {
-            $module->initClassLoader($classLoader);
-        }
-    }
+    // /**
+    //  * Load the module. This will run for all modules, use for routes mainly
+    //  * @param string $moduleName Module name
+    //  */
+    // public function initClassLoader()
+    // {
+    //     $moduleInstances = $this->moduleInstances;
+    //     $classLoader = $this->classLoader;
+    //
+    //     foreach ($moduleInstances as $module) {
+    //         $module->initClassLoader($classLoader);
+    //     }
+    // }
 
     /**
      * Load the module. This will run for all modules, use for routes mainly
