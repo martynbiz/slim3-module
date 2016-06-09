@@ -29,20 +29,16 @@ class Initializer
      */
     protected $settings;
 
+    /**
+     * @var array
+     */
+    protected $moduleInstances = [];
+
     public function __construct($app, ClassLoader $classLoader, $settings=array())
     {
         $this->app = $app;
         $this->classLoader = $classLoader;
         $this->settings = $settings;
-    }
-
-    /**
-     * Load the module. This will run for all modules, use for routes mainly
-     * @param string $moduleName Module name
-     */
-    public function initModules()
-    {
-        $moduleInstances = [];
 
         // build an class map of [[module => moduleClassPath], ..]
         // $moduleClassMap = [];
@@ -59,42 +55,107 @@ class Initializer
 
             // add to class map so we can easily access it later in this function
             $moduleClassName = sprintf('%s\Module', $moduleName);
-            $moduleInstances[$moduleName] = new $moduleClassName();
+            $this->moduleInstances[$moduleName] = new $moduleClassName();
         }
+    }
 
-        // next, loop through each module and call methods in order
-
+    /**
+     * Load the module. This will run for all modules, use for routes mainly
+     * @param string $moduleName Module name
+     */
+    public function initModules()
+    {
+        $moduleInstances = $this->moduleInstances;
         $classLoader = $this->classLoader;
         $app = $this->app;
         $container = $app->getContainer();
 
-        // first, class loader for all modules so that we can access classes between modules
-        // e.g. other modules depend on Auth module, so we need to access those classes when
-        // we initDependencies
-        foreach ($moduleInstances as $module) {
-            $module->initClassLoader($classLoader);
-        }
-
         // next, load settings of all modules
         foreach ($moduleInstances as $moduleName => $module) {
-            $moduleSettings = $module->getModuleConfig();
             $allSettings = $container['settings']->all();
             if (!isset($allSettings['modules'][$moduleName]) or !is_array($allSettings['modules'][$moduleName])) {
                 $allSettings['modules'][$moduleName] = [];
             }
-            $allSettings['modules'][$moduleName] = array_merge_recursive($allSettings['modules'][$moduleName], $moduleSettings);
+            $allSettings['modules'] = array_merge_recursive($allSettings['modules'], $this->getModuleConfig());
             $container['settings']->__construct( $allSettings );
         }
+
+        $this->initClassLoader($classLoader);
+        $this->initDependencies($container);
+        $this->initMiddleware($app);
+        $this->initRoutes($app);
+    }
+
+    /**
+     * Load the module. This will run for all modules, use for routes mainly
+     * @param string $moduleName Module name
+     */
+    public function initClassLoader()
+    {
+        $moduleInstances = $this->moduleInstances;
+        $classLoader = $this->classLoader;
+
+        foreach ($moduleInstances as $module) {
+            $module->initClassLoader($classLoader);
+        }
+    }
+
+    /**
+     * Load the module. This will run for all modules, use for routes mainly
+     * @param string $moduleName Module name
+     */
+    public function getModuleConfig()
+    {
+        $moduleInstances = $this->moduleInstances;
+
+        $allModules = [];
+        foreach ($moduleInstances as $moduleName => $module) {
+            $moduleSettings = $module->getModuleConfig();
+            $allModules[$moduleName] = $module->getModuleConfig();
+        }
+
+        return $allModules;
+    }
+
+    /**
+     * Load the module. This will run for all modules, use for routes mainly
+     * @param string $moduleName Module name
+     */
+    public function initDependencies()
+    {
+        $moduleInstances = $this->moduleInstances;
+        $app = $this->app;
+        $container = $app->getContainer();
 
         // next, init dependencies of all modules now that we have settings, class maps etc
         foreach ($moduleInstances as $module) {
             $module->initDependencies($container);
         }
+    }
+
+    /**
+     * Load the module. This will run for all modules, use for routes mainly
+     * @param string $moduleName Module name
+     */
+    public function initMiddleware()
+    {
+        $moduleInstances = $this->moduleInstances;
+        $app = $this->app;
 
         // next, init app middleware of all modules now that we have settings, class maps, dependencies etc
         foreach ($moduleInstances as $module) {
             $module->initMiddleware($app);
         }
+    }
+
+    /**
+     * Load the module. This will run for all modules, use for routes mainly
+     * @param string $moduleName Module name
+     */
+    public function initRoutes()
+    {
+        $moduleInstances = $this->moduleInstances;
+        $app = $this->app;
 
         // lastly, routes
         foreach ($moduleInstances as $module) {
