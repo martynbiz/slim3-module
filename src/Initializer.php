@@ -18,11 +18,11 @@ class Initializer
      */
     protected $app;
 
-    /**
-
-     * @var ClassLoader
-     */
-    protected $classLoader;
+    // /**
+    //
+    //  * @var ClassLoader
+    //  */
+    // protected $classLoader;
 
     /**
      * @var array
@@ -34,10 +34,10 @@ class Initializer
      */
     protected $moduleInstances = [];
 
-    public function __construct($app, ClassLoader $classLoader, $settings=array())
+    public function __construct($app, $settings=array())
     {
         $this->app = $app;
-        $this->classLoader = $classLoader;
+        // $this->classLoader = $classLoader;
         $this->settings = $settings;
 
         // build an class map of [[module => moduleClassPath], ..]
@@ -66,7 +66,7 @@ class Initializer
     public function initModules()
     {
         $moduleInstances = $this->moduleInstances;
-        $classLoader = $this->classLoader;
+        // $classLoader = $this->classLoader;
         $app = $this->app;
         $container = $app->getContainer();
 
